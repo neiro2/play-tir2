@@ -24,11 +24,14 @@ for _ in range(num_targets):
     target = {
         'x': random.randint(0, SCREEN_WIDTH - target_width),
         'y': random.randint(0, SCREEN_HEIGHT - target_height),
-        'color': (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)),
+        'speed_x': random.choice([-0.5 -0.2, -0,1, 0,1, 0.2, 0.5]),  # случайная скорость по оси X
+        'speed_y': random.choice([-0.5 -0.2, -0,1, 0,1, 0.2, 0.5]),  # случайная скорость по оси Y
         'points': random.randint(1, 10)
     }
     targets.append(target)
 color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
+# Инициализация шрифта
+font = pygame.font.Font(None, 36)
 
 misses = 0
 score = 0
@@ -58,9 +61,25 @@ while running:
                     print("Игра окончена!")
                     running = False
 
-    # Отрисовываем мишени
+    # Обновляем позиции мишеней
     for target in targets:
-        pygame.draw.rect(screen, target['color'], (target['x'], target['y'], target_width, target_height))
+        target['x'] += target['speed_x']
+        target['y'] += target['speed_y']
+
+        # Проверяем столкновение с границами экрана и изменяем направление
+        if target['x'] <= 0 or target['x'] + target_width >= SCREEN_WIDTH:
+            target['speed_x'] = -target['speed_x']
+        if target['y'] <= 0 or target['y'] + target_height >= SCREEN_HEIGHT:
+            target['speed_y'] = -target['speed_y']
+
+        # Отрисовываем мишени
+        screen.blit(target_image, (target['x'], target['y']))
+
+    # Отображаем счет и количество промахов
+    score_text = font.render(f'Счет: {score}', True, (255, 255, 255))
+    misses_text = font.render(f'Промахи: {misses}', True, (255, 255, 255))
+    screen.blit(score_text, (10, 10))
+    screen.blit(misses_text, (10, 50))
 
     pygame.display.update()
 
