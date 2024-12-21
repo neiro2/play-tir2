@@ -55,6 +55,8 @@ for _ in range(num_targets):
         'x': random.randint(0, SCREEN_WIDTH - target_width),
         'y': random.randint(0, SCREEN_HEIGHT - target_height),
         'color': (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)),
+        'speed_x': random.choice([-0.5 - 0.2, -0, 1, 0, 1, 0.2, 0.5]),  # случайная скорость по оси X
+        'speed_y': random.choice([-0.5 - 0.2, -0, 1, 0, 1, 0.2, 0.5]),  # случайная скорость по оси Y
         'points': random.randint(1, 10)
     }
     targets.append(target)
